@@ -42,11 +42,8 @@ class Person:
         
 
 p1 = Person('Ram',23)
-p2 = Person('sam',25)
-print(p1<p2)
+p2 = Person('sam',25) 
+print(p1>p2)
 
-# if p1>p2:
-#     print("p1 should pay")
-# else:
-#     print("p2 pay bill")
+
 
