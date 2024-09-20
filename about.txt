@@ -1,1 +1,13 @@
 ADVANCED OOPS & their 4 Pillars will be Discused.
+
+4 Pillars
+1.Inheritance
+
+2.Polymorphism
+    1.Duck Typing
+    2.Operator Overloading
+    3.Method Overloading
+    4.Method Overriding
+
+3.Data Abstraction
+4.Encapsulation
