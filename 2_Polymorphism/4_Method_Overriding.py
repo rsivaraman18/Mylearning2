@@ -12,7 +12,7 @@ class Father:
 
 class Son(Father):
     def sleep(self):
-        print("Sleeps at 9 pm")
+        super().sleep()
 
 person = Son()
 person.eats()
