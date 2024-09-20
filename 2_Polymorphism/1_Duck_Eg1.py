@@ -43,6 +43,10 @@ obj1 = Duck()
 obj2 = Dog()
 obj3 = Person()
 
+display(obj1)
+display(obj2)
+display(obj3)
+
 
 
 
