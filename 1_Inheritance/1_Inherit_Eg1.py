@@ -1,1 +1,0 @@
-# Inheritance will be handled here.
