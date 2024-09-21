@@ -15,20 +15,20 @@ Accessing private Members
 # """
 # Example1:
 
-class Company:
-    def __init__(self,name,age) :
-       self.name  = name
-       self.__age = age
-       print(f"Constructor: {self.name} & {self.__age}")
+# class Company:
+#     def __init__(self,name,age) :
+#        self.name  = name
+#        self.__age = age
+#        print(f"Constructor: {self.name} & {self.__age}")
 
 
-c1 = Company('Python',25)
-print(c1.name)  # Python
-print(c1.__age) # No Attribute error
+# c1 = Company('Python',25)
+# print(c1.name)  # Python
+# print(c1.__age) # No Attribute error
 
 
 
-## Example 2:
+# # Example 2:
 # class Company:
 #     def __init__(self,name,age) :
 #        self.name  = name
@@ -45,6 +45,33 @@ print(c1.__age) # No Attribute error
 
 
 
+# class Company:
+#     def __init__(self,name,age) :
+#        self.name  = name
+#        self.__age = age
+#        print(f"Constructor: {self.name} & {self.__age}")
+
+
+# c1 = Company('Python',25)
+# c1.name = "Java"
+# c1.__age = 50
+# print(c1.name) 
+# print(c1.__age) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Example 3: Mangling method
 # class Company:
 #     def __init__(self,name,age) :
@@ -53,23 +80,22 @@ print(c1.__age) # No Attribute error
 #        print(f"Constructor: {self.name} & {self.__age}")
 
 
-# obj = Company("ganesh",23)
+# obj = Company("ganesh",75)
 # print(obj.name)
-
 # print(obj._Company__age)
-# print(obj.__age)
+
 
 
 # example 4: Using Public Method
-# class Company:
-#     def __init__(self,name,age) :
-#        self.name  = name
-#        self.__age = age
-#        print(f"Constructor: {self.name} & {self.__age}")
+class Company:
+    def __init__(self,name,age) :
+       self.name  = name
+       self.__age = age
+       print(f"Constructor: {self.name} & {self.__age}")
     
-#     def showvariables(self):
-#         print(f"Name is {self.name} & Age is {self.__age} ")
+    def showvariables(self):
+        print(f"Name is {self.name} & Age is {self.__age} ")
 
-# obj = Company("ganesh",23)
-# print(obj.name)
-# print(obj.showvariables())
+obj = Company("ganesh",23)
+print(obj.name)
+print(obj.showvariables())
