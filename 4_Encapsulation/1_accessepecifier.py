@@ -12,19 +12,19 @@ Accessing private Members
         Syntax: obj._{className}__{functionName}
 
 
-"""
+# """
 # Example1:
 
-# class company():
-#     def __init__(self,name,age) :
-#        self.name  = name
-#        self.__age = age
-#        print(f"Constructor: {self.name} & {self.__age}")
+class Company:
+    def __init__(self,name,age) :
+       self.name  = name
+       self.__age = age
+       print(f"Constructor: {self.name} & {self.__age}")
 
 
-# c1 = company('Nanban',25)
-# print(c1.name)  # Nanban
-# print(c1.__age) # No Attribute error
+c1 = Company('Python',25)
+print(c1.name)  # Python
+print(c1.__age) # No Attribute error
 
 
 
@@ -61,15 +61,15 @@ Accessing private Members
 
 
 # example 4: Using Public Method
-class Company:
-    def __init__(self,name,age) :
-       self.name  = name
-       self.__age = age
-       print(f"Constructor: {self.name} & {self.__age}")
+# class Company:
+#     def __init__(self,name,age) :
+#        self.name  = name
+#        self.__age = age
+#        print(f"Constructor: {self.name} & {self.__age}")
     
-    def showvariables(self):
-        print(f"Name is {self.name} & Age is {self.__age} ")
+#     def showvariables(self):
+#         print(f"Name is {self.name} & Age is {self.__age} ")
 
-obj = Company("ganesh",23)
-print(obj.name)
-print(obj.showvariables())
+# obj = Company("ganesh",23)
+# print(obj.name)
+# print(obj.showvariables())
