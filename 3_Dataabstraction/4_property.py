@@ -5,13 +5,13 @@ class BankAccount:
     @property
     def balance(self):
         # Getter for balance
-        print('Gets the Balance')
+        print('Getter-->Balance')
         return self._balance
     
     @balance.setter
     def balance(self, amount):
         # Setter for balance with validation
-        print('Setting Balance')
+        print('Setter-->Setting Balance')
         if amount >= 0:
             self._balance = amount
         else:
