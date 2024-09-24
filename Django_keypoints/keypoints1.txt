@@ -1,71 +1,74 @@
-# 1.Render a Page with Message
+1.Render a Page with Message
 
 from django.http import HttpResponse
 def message(request):
     return HttpResponse("Welcome")
 
-#2. render a Page with Template
-from django.shortcuts import render
-def index(request):
-    return render(request,'index.html')
+2. Render a Page with Template
+    from django.shortcuts import render
+    def index(request):
+        return render(request,'index.html')
 
 
-#3.Render a page with context
+3.Render a page with context
 
-from django.shortcuts import render
-def index(request):
-    context = {'name':'siva','msg':'welcome'}
-    return render(request,'index.html',context)
-
-
-#4.Render a page with context using dictioanry.
-
-from django.shortcuts import render
-def index(request):
-    user = {'name':'siva','msg':'welcome'}
-    return render(request,'index.html',{'details':user})
-
-#5.URls.py
-from django.urls import path
-from . import views
-
-urlpatterns = [
-    path('members/', views.members, name='members'),
-]
+    from django.shortcuts import render
+    def index(request):
+        context = {'name':'siva','msg':'welcome'}
+        return render(request,'index.html',context)
 
 
-# 6.Urls.py with Include to call App Urls.py
+4.Render a page with context using dictioanry.
 
-from django.contrib import admin
-from django.urls import path,include
-from . import views
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.home_view, name='home'),
-    path('app1/',  include('App1.urls')),
-    path('app2/',  include('App2.urls')),
-]
+    from django.shortcuts import render
+    def index(request):
+        user = {'name':'siva','msg':'welcome'}
+        return render(request,'index.html',{'details':user})
+
+5.URls.py
+
+    from django.urls import path
+    from . import views
+
+    urlpatterns = [
+        path('members/', views.members, name='members'),
+    ]
+
+
+6.Urls.py with Include to call App Urls.py
+
+    from django.contrib import admin
+    from django.urls import path,include
+    from . import views
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', views.home_view, name='home'),
+        path('app1/',  include('App1.urls')),
+        path('app2/',  include('App2.urls')),
+    ]
+
 
 # 7.Rendering using template loader
 
-from django.http import HttpResponse
-from django.template import loader
+    from django.http import HttpResponse
+    from django.template import loader
 
-def members(request):
-  template = loader.get_template('myfirst.html')
-  return HttpResponse(template.render())
+    def members(request):
+    template = loader.get_template('myfirst.html')
+    return HttpResponse(template.render())
 
-# 8.Models
-from django.db import models
 
-class Member(models.Model):
-  firstname = models.CharField(max_length=255)
-  lastname = models.CharField(max_length=255)
+8.Models
+    from django.db import models
+
+    class Member(models.Model):
+    firstname = models.CharField(max_length=255)
+    lastname = models.CharField(max_length=255)
 
 Commands
-python manage.py makemigrations 
-python manage.py migrate
-python manage.py sqlmigrate members 0001 (View SQL Queries)
+    python manage.py makemigrations 
+    python manage.py migrate
+    python manage.py sqlmigrate members 0001 (View SQL Queries)
 
 
 9.To Insert record from shell
@@ -78,7 +81,7 @@ python manage.py sqlmigrate members 0001 (View SQL Queries)
         member = Member(firstname='Emil', lastname='Refsnes')
         member.save()
 
-    9c. To see records in queryset format
+    9c. To see records in queryset format(shell)
         from members.models import Member
         Member.objects.all().values()
         
@@ -111,6 +114,8 @@ python manage.py sqlmigrate members 0001 (View SQL Queries)
     from members.models import *
 
 14.Update a record
+    To Update a record it is not mandatory to know the Id 
+    of a record ,we can do it by index also.(Eg14b)
     14a.Updating a particular record
         from members.models import Member
         data = Member.objects.get(name='python')
@@ -118,3 +123,29 @@ python manage.py sqlmigrate members 0001 (View SQL Queries)
         data.msg = 'coding'
         data.save()
 
+    14b.To Update 5th record in a queryset
+        from members.models import Member
+        x = Member.objects.all()[4] # returns 1 record
+        x.name = 'java'
+        x.save()
+    
+    14c.Update() -->Used to update a multiple records at once. 
+        It directly handles the queryset.
+            If we need to change status from inactive to active 
+            for multiple records.
+        obj = Member.objects.filter(status="inactive")
+        obj.update(status="active")
+
+15.Delete a record
+    15a.Delete a record using id
+        from members.models import Member
+        data = Member.objects.get(id=1001)
+        data.delete()
+    15b.Using index
+        from members.models import Member
+        x = Member.objects.all()[2]
+        x.delete()
+
+16.Models.py 
+    1.CharField - max_length,null = True
+    2.DateField
