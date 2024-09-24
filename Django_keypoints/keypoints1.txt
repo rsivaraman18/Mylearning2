@@ -1,0 +1,120 @@
+# 1.Render a Page with Message
+
+from django.http import HttpResponse
+def message(request):
+    return HttpResponse("Welcome")
+
+#2. render a Page with Template
+from django.shortcuts import render
+def index(request):
+    return render(request,'index.html')
+
+
+#3.Render a page with context
+
+from django.shortcuts import render
+def index(request):
+    context = {'name':'siva','msg':'welcome'}
+    return render(request,'index.html',context)
+
+
+#4.Render a page with context using dictioanry.
+
+from django.shortcuts import render
+def index(request):
+    user = {'name':'siva','msg':'welcome'}
+    return render(request,'index.html',{'details':user})
+
+#5.URls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('members/', views.members, name='members'),
+]
+
+
+# 6.Urls.py with Include to call App Urls.py
+
+from django.contrib import admin
+from django.urls import path,include
+from . import views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.home_view, name='home'),
+    path('app1/',  include('App1.urls')),
+    path('app2/',  include('App2.urls')),
+]
+
+# 7.Rendering using template loader
+
+from django.http import HttpResponse
+from django.template import loader
+
+def members(request):
+  template = loader.get_template('myfirst.html')
+  return HttpResponse(template.render())
+
+# 8.Models
+from django.db import models
+
+class Member(models.Model):
+  firstname = models.CharField(max_length=255)
+  lastname = models.CharField(max_length=255)
+
+Commands
+python manage.py makemigrations 
+python manage.py migrate
+python manage.py sqlmigrate members 0001 (View SQL Queries)
+
+
+9.To Insert record from shell
+ 
+
+    9a. py manage.py shell
+
+    9b. Insert a record
+        from members.models import Member
+        member = Member(firstname='Emil', lastname='Refsnes')
+        member.save()
+
+    9c. To see records in queryset format
+        from members.models import Member
+        Member.objects.all().values()
+        
+    9d. Insert Multiple record
+        from members.models import Member
+        member1 = Member(firstname='Tobias', lastname='Refsnes')
+        member2 = Member(firstname='Linus', lastname='Refsnes')
+        member3 = Member(firstname='Lene', lastname='Refsnes')
+        members_list = [member1, member2, member3]
+        for x in members_list:
+            x.save()
+
+10.Retrive all Datas from database.
+    from members.models import Member
+    datas = Member.objects.all()
+    print(datas)  -->queryset 
+
+11.Retrive specific record from database
+    from members.models import Member
+    data = Member.objects.get(id=id)
+    print(data) -->single record
+
+12.Retrive records matches some category.
+    from members.models import Member
+    data = Member.objects.filter(name='python')
+    print(data) ->queryset
+
+13.Importing in differnt ways.
+    from members.models import Member
+    from members.models import *
+
+14.Update a record
+    14a.Updating a particular record
+        from members.models import Member
+        data = Member.objects.get(name='python')
+        data.name = 'java'
+        data.msg = 'coding'
+        data.save()
+
