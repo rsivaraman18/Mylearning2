@@ -15,7 +15,7 @@ def CustomerAdd(request):
         newcustomer.save()
         return redirect('/Customers/customer_viewall/')
 
-    return render(request,'Customer/1_add.html',)
+    return render(request,'Customer/1_add.html',{'cust_form':cust_form})
 
 
 
