@@ -46,8 +46,14 @@ def CustomerUpdate(request,id):
     cust_oldinfo = MyCustomer.objects.get(id=id)
     cust_form    = MyCustomerForm(instance=cust_oldinfo)
     if request.method=='POST':
-        update_cust = MyCustomerForm(request.POST,isinstance=cust_oldinfo)
-        update_cust.save()
-
+        update_cust = MyCustomerForm(request.POST,instance=cust_oldinfo)
+        if update_cust.is_valid():
+            update_cust.save()
+            messages.success(request,'Updated Successfully')
+        else:
+            messages.warning(request,update_cust.errors)
+        return redirect('customerlist')
+    
     return render(request,'Customer/3_update.html',{'cust_form':cust_form})
+
     
