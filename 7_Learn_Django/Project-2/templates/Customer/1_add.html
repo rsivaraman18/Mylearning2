@@ -7,9 +7,10 @@
 </head>
 <body>
     New Customer Register Page
-    <form action="" method="">
+    <form action="" method="POST" autocomplete="off">
+        {% csrf_token %}
         {{cust_form.as_p}}
-        <input type="button" value="Register">
+        <input type="submit" value="Register">
     </form>
    
 </body>
