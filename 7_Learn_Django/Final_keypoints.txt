@@ -1,0 +1,396 @@
+1.Render a Page with Message
+
+from django.http import HttpResponse
+def message(request):
+    return HttpResponse("Welcome")
+
+2. Render a Page with Template
+    from django.shortcuts import render
+    def index(request):
+        return render(request,'index.html')
+
+
+3.Render a page with context
+
+    from django.shortcuts import render
+    def index(request):
+        context = {'name':'siva','msg':'welcome'}
+        return render(request,'index.html',context)
+
+
+4.Render a page with context using dictioanry.
+
+    from django.shortcuts import render
+    def index(request):
+        user = {'name':'siva','msg':'welcome'}
+        return render(request,'index.html',{'details':user})
+
+5.URls.py
+
+    from django.urls import path
+    from . import views
+
+    urlpatterns = [
+        path('members/', views.members, name='members'),
+    ]
+
+
+6.Urls.py with Include to call App Urls.py
+
+    from django.contrib import admin
+    from django.urls import path,include
+    from . import views
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', views.home_view, name='home'),
+        path('app1/',  include('App1.urls')),
+        path('app2/',  include('App2.urls')),
+    ]
+
+
+# 7.Rendering using template loader
+
+    from django.http import HttpResponse
+    from django.template import loader
+
+    def members(request):
+        template = loader.get_template('myfirst.html')
+        return HttpResponse(template.render())
+
+
+8.Models
+    from django.db import models
+
+    class Member(models.Model):
+    firstname = models.CharField(max_length=255)
+    lastname = models.CharField(max_length=255)
+
+Commands
+    python manage.py makemigrations 
+    python manage.py migrate
+    python manage.py sqlmigrate members 0001 (View SQL Queries)
+
+
+9.To Insert record from shell
+ 
+
+    9a. py manage.py shell
+
+    9b. Insert a record
+        from members.models import Member
+        member = Member(firstname='Emil', lastname='Refsnes')
+        member.save()
+
+    9c. To see records in queryset format(shell)
+        from members.models import Member
+        Member.objects.all().values()
+        
+    9d. Insert Multiple record
+        from members.models import Member
+        member1 = Member(firstname='Tobias', lastname='Refsnes')
+        member2 = Member(firstname='Linus', lastname='Refsnes')
+        member3 = Member(firstname='Lene', lastname='Refsnes')
+        members_list = [member1, member2, member3]
+        for x in members_list:
+            x.save()
+
+10.Retrive all Datas from database.
+    from members.models import Member
+    datas = Member.objects.all()
+    print(datas)  -->queryset 
+
+11.Retrive specific record from database
+    from members.models import Member
+    data = Member.objects.get(id=id)
+    print(data) -->single record
+
+12.Retrive records matches some category.
+    from members.models import Member
+    data = Member.objects.filter(name='python')
+    print(data) ->queryset
+
+13.Importing in differnt ways.
+    from members.models import Member
+    from members.models import *
+
+14.Update a record
+    To Update a record it is not mandatory to know the Id 
+    of a record ,we can do it by index also.(Eg14b)
+    14a.Updating a particular record
+        from members.models import Member
+        data = Member.objects.get(name='python')
+        data.name = 'java'
+        data.msg = 'coding'
+        data.save()
+
+    14b.To Update 5th record in a queryset
+        from members.models import Member
+        x = Member.objects.all()[4] # returns 1 record
+        x.name = 'java'
+        x.save()
+    
+    14c.Update() -->Used to update a multiple records at once. 
+        It directly handles the queryset.
+            If we need to change status from inactive to active 
+            for multiple records.
+        obj = Member.objects.filter(status="inactive")
+        obj.update(status="active")
+
+15.Delete a record
+    15a.Delete a record using id
+        from members.models import Member
+        data = Member.objects.get(id=1001)
+        data.delete()
+    15b.Using index
+        from members.models import Member
+        x = Member.objects.all()[2]
+        x.delete()
+
+16.Models.py 
+    16a.Sample models.py
+        from django.db import models
+        class Mystudent(models.Model):
+            name = models.CharField(max_length=100)
+            designation = models.CharField(max_length=40,null=True)
+            pay = models.FloatField(default=0)
+
+    16b.Datatypes
+        1.CharField - max_length,null = True
+        2.DateField 
+
+
+17.Forms.py
+    17a.Models.py
+        from django.db import models
+        class Mystudent(models.Model):
+            name = models.CharField(max_length=100)
+            designation = models.CharField(max_length=40,null=True)
+            pay = models.FloatField(default=0)
+
+    17b.forms.py
+        from django.forms import ModelForm
+        from .models import *
+
+        class StudentMyform(ModelForm):
+            class Meta:
+                model = Mystudent
+                fields = "__all__"
+
+    17c.urls.py
+        urlpatterns = [
+            path('studentregister/', views.student_register),
+        ]
+
+    17d.views.py
+        from .models import *
+        from .forms import *
+
+        def student_register(request):
+            context = {'studentform':StudentMyform()}
+            return render(request,'studentregister.html',context)
+
+    
+    17e.Tempates --> studentregister.html
+
+        <h2>Student Register Page</h2>
+        <form action="" method="POST" autocomplete="off">
+            {% csrf_token %}
+            {{studentform}}
+        </form>
+
+    17f.admins.py(Optional)
+        from django.contrib import admin
+        from .models import *
+        admin.site.register(Mystudent)
+
+18.Using forms.py save into database.
+    Do Procedure 17 and follow this.
+    18a.Views.py
+        def student_register(request):
+            print(request.POST)
+            if request.method=="POST":
+                new_student =  StudentMyform(request.POST)
+                if new_student.is_valid():
+                    new_student.save()
+
+            context = {'studentform':StudentMyform()}
+            return render(request,'studentregister.html',context)
+    
+    18b.HTML Page
+        <h2>Student Register Page</h2>
+        <form action="/student/studentregister/" method="POST" autocomplete="off">
+            {% csrf_token %}
+            {{studentform}}
+            <input type="submit" value="Register">
+        </form>
+
+    18c.Alternate Views.py 
+        def student_register(request):
+            if request.method=="POST":
+                uname   = request.POST['name']
+                udesign = request.POST['designation']
+                upay    = request.POST['pay']
+
+                new_student = Mystudent(name=uname, designation=udesign, pay=upay)
+                new_student.save()
+
+            context = {'studentform':StudentMyform()}
+            return render(request,'studentregister.html',context)
+
+
+19a.Retrieve all Data from Database & show in Page.
+    19a.Views.py
+        def Student_viewall(request):
+            allstudent = Mystudent.objects.all()
+            return render(request,'allstudent.html',{'datas':allstudent})
+    
+    19b.Urls.py
+        path('studentviewall/', views.Student_viewall),
+
+    19c.Template
+         <h3>All Student from database</h3>
+            {% if datas %}
+                <table>
+                    <thead>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Sallary</th>
+                    </thead>
+                    <tbody>
+                        {% for data in datas %}
+                            <tr>
+                                <td>{{data.id}}</td>
+                                <td>{{data.name}}</td>
+                                <td>{{data.designation}}</td>
+                                <td>{{data.pay}}</td>
+                            </tr>
+                        
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            {% else %}
+                <h4>No Student Registered</h4>
+            {% endif%}
+
+20.To delete a particular entry from html page.
+    20a.Urls.py
+        path('studentdelete/<int:id>/', views.Student_delete , name='StDelete')
+        
+    20b.Views.py
+        from django.shortcuts import render,redirect
+        def Student_delete(request,id):
+            data = Mystudent.objects.get(id=id)
+            data.delete()
+            return redirect('/student/studentviewall/')
+    
+    20c.Template Delete Buttons
+        <td><a href="{% url 'StDelete' data.id %}">Delete1</a></td>
+        <td><a href="/student/studentdelete/{{data.id}}/">Delete2</a></td>
+        
+
+21.Update a record using ID.
+    21a.Urls.py 
+        <td><a href="{% url 'StUpdate' data.id %}">Update 1</a></td>
+        <td><a href="/student/studentupdate/{{data.id}}/">Update 2</a></td>
+    
+    21b.templates-1 Update.html
+        Create a new Update page
+        <h2>Student Update Page</h2>
+        <form action="/student/studentupdate/{{data.id}}/" method="POST" autocomplete="off">
+            {% csrf_token %}
+            {{ studentform.as_p }}
+            <input type="submit" value="Register">
+        </form>
+    
+    21c.Views1 - Using Form,.save,isinstance
+        def Student_Update(request,id):
+            studentdata =  Mystudent.objects.get(id=id)
+            studentform = StudentMyform(instance=studentdata)
+
+            if request.method=='POST':
+                updated_data = StudentMyform(request.POST,instance=studentdata)
+                if updated_data.is_valid():
+                    updated_data.save()
+                else:
+                    print(updated_data.errors)
+                return redirect('StUpdate')
+
+            return render(request,'studentupdate.html',{'studentform':studentform,'data':studentdata})
+    
+    21d.Views2 -  
+        def Student_Update(request,id):
+            studentdata =  Mystudent.objects.get(id=id)
+            studentform = StudentMyform(instance=studentdata)
+
+            if request.method=='POST':
+                print('Error')
+                uname   = request.POST['name']
+                udesign = request.POST['designation']
+                upay    = request.POST['pay']
+
+                studentdata.name = uname
+                studentdata.designation = udesign
+                studentdata.pay = upay
+                studentdata.save()
+                print('Data saved')
+                return redirect('viewallpage')
+                
+            return render(request,'studentupdate.html',{'studentform':studentform,'data':studentdata})   
+
+    21e.Views3-Update--> Directly Changes queryset
+        def Student_Update(request, id):
+            studentdata =  Mystudent.objects.get(id=id)
+            studentform = StudentMyform(instance=studentdata)
+
+            if request.method == 'POST':
+                obj = Mystudent.objects.filter(id=id)
+                obj.update(name=request.POST['name'], 
+                    designation=request.POST['designation'],
+                    pay=request.POST['pay'])
+                return redirect('viewallpage')
+
+            return render(request,'studentupdate.html',
+                {'studentform':studentform,'data':studentdata})
+
+22.Install Bootstrap 5 for django
+    22a.terminal
+        pip install django-bootstrap-v5
+
+    22b.project-settings.py
+        Installedapps = ['bootstrap5']
+    
+    22c.Html page
+        <head>
+            {% load bootstrap5 %}
+            {% bootstrap_css %}
+            {% bootstrap_javascript %}
+        </head>
+    
+    22d.Or Use CDN Link
+
+23.Template Inheritance - Extend Method
+    23a.base.html
+        <title>{% block title %} Change Dynamic {% endblock %}</title>
+        <body>
+            <h1>This is Template Inheritance</h1>
+            {% block content %}
+                This content will be overridden in the child template.
+            {% endblock %}
+            <h3>Footer Student@123</h3>
+        </body>
+    
+    23b.index - child Page
+        {% extends 'base.html' %}
+        {% block title %}Index Page {% endblock %}
+     
+        {% block content %}
+            <h3>Welcome Index page</h1>
+            <h4>Only index content</h4>
+        {% endblock %}
+
+        <h3>happy</h3> ## this not seen. 
+
+24.Template Inheriatnce - Include
+    24a.

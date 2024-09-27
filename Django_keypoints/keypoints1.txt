@@ -54,8 +54,8 @@ def message(request):
     from django.template import loader
 
     def members(request):
-    template = loader.get_template('myfirst.html')
-    return HttpResponse(template.render())
+        template = loader.get_template('myfirst.html')
+        return HttpResponse(template.render())
 
 
 8.Models
@@ -147,5 +147,35 @@ Commands
         x.delete()
 
 16.Models.py 
-    1.CharField - max_length,null = True
-    2.DateField
+    16a.Sample models.py
+        from django.db import models
+        class Members(models.Model):
+            name = models.CharField(max_length=100)
+            job  = models.CharField(max_length=50)
+            price = models.FloatField(default=0)
+
+    16b.Datatypes
+        1.CharField - max_length,null = True
+        2.DateField 
+
+
+17.Forms.py
+    17a.Sample Form
+        from django.forms import ModelForm
+        from . models import *
+
+        class Student_form(ModelForm):
+
+            class Meta:
+                model = Databasename
+                fields = '__all__'
+
+    17b.urls.py
+        urlpatterns = [
+            path('products_add/',  views.products_add),
+        ]
+
+    17c.views.py
+        def products_add(request):
+            user = {'name':'siva','msg':'welcome'}
+            return render(request,'products_add.html',{'details':user})
