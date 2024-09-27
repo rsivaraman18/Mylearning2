@@ -393,4 +393,28 @@ Commands
         <h3>happy</h3> ## this not seen. 
 
 24.Template Inheriatnce - Include
-    24a.
+    24a.Navbar.html
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        <nav> ....</nav>
+
+    24b.index.html
+        {% include 'navbar.html' %}
+
+    24c.Alter index.html
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Index page</title>
+        </head>
+        <body>
+            <h4>Index page</h4>
+                {% include 'navbar.html' %}
+            <h1>Welcomes you</h1>
+        </body>
+        </html>
+
+25.
