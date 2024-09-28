@@ -74,10 +74,12 @@ def CustomerNewOrder(request):
     return render(request,'Customer/4_orderpage.html',context)
 
 
+
 def CustomerViewOrder(request):
     allorders = Myorders.objects.all()
     datas = {'datas':allorders}
     return render(request,'Customer/5_orderview.html',datas)
+
 
 
 def CustomerOrderDelete(request,id):
