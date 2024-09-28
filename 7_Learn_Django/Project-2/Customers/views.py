@@ -55,7 +55,7 @@ def CustomerUpdate(request,id):
     
     return render(request,'Customer/3_update.html',{'cust_form':cust_form})
 
-    
+from datetime import * 
 
 def CustomerNewOrder(request):
     order_form = MyOrderForm()
@@ -65,6 +65,10 @@ def CustomerNewOrder(request):
         customerid       = request.POST['customer_reference']
         selected_product = MyProducts.objects.get(id=productid)
         customer_name    = MyCustomer.objects.get(id=customerid)
+        ## Date Formating
+        order_date_str   = request.POST['order_date']
+        forder_date      = datetime.strptime(order_date_str, '%d-%b-%Y').date()
+        ## Calculation
         amount           = float(selected_product.product_price) * float(request.POST['quantity'])
         gst_amount       = (amount * selected_product.product_gst)/100
         bill_amount      = amount + gst_amount
@@ -72,24 +76,17 @@ def CustomerNewOrder(request):
         neworder = Myorders(customer_reference = customer_name,
                             product_reference  = selected_product,
                             order_number       = request.POST['order_number'],
-                            order_date         = request.POST['order_date'],
+                            order_date         = forder_date,
                             quantity           = request.POST['quantity'],
                             amount             = amount,
                             gst_number         = gst_amount,
                             bill_amount        = bill_amount,
                             )
-        if neworder.is_valid():
-            neworder.save()
-            messages.success(request,"New Order Placed Successfully")
-        else:
-            messages.warning(request,"Erroroooo")
-        # try:
-        #     if neworder.is_valid():
-        #         neworder.save()
-        #         messages.success(request,"New Order Placed Successfully")
-        # except:
-        #     messages.warning(request, "Error in Ordering")
+        
+        neworder.save()
+        messages.success(request,"New Order Placed Successfully")
         return redirect('orderslist')
+    
     return render(request,'Customer/4_orderpage.html',context)
 
 
@@ -107,3 +104,35 @@ def CustomerOrderDelete(request,id):
     messages.success(request,f'Order Id{id} deleted Successfully')
     return redirect('orderslist')
 
+
+def CustomerOrderUpdate(request,id):
+    order     = Myorders.objects.get(id=id)
+    orderform = MyOrderForm(instance=order)
+    context   = {'order_updateform':orderform}
+    if request.method == 'POST':
+        productid        = request.POST['product_reference']
+        customerid       = request.POST['customer_reference']
+        selected_product = MyProducts.objects.get(id=productid)
+        customer_name    = MyCustomer.objects.get(id=customerid)
+        ## Date Formating
+        order_date_str   = request.POST['order_date']
+        forder_date      = datetime.strptime(order_date_str, '%d-%b-%Y').date()
+        ## Calculation
+        amount           = float(selected_product.product_price) * float(request.POST['quantity'])
+        gst_amount       = (amount * selected_product.product_gst)/100
+        bill_amount      = amount + gst_amount
+        
+        neworder = Myorders(customer_reference = customer_name,
+                            product_reference  = selected_product,
+                            order_number       = request.POST['order_number'],
+                            order_date         = forder_date,
+                            quantity           = request.POST['quantity'],
+                            amount             = amount,
+                            gst_number         = gst_amount,
+                            bill_amount        = bill_amount,
+                            )
+        
+        neworder.save()
+        messages.success(request,"Order Updated Successfully")
+        return redirect('orderslist')
+    return render(request , 'Customer/6_orderupdate.html',context)
