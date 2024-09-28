@@ -36,7 +36,10 @@
     </style>
 </head>
 <body>
+
+    {% include 'Customer/navbar.html' %}
     <h3 style="text-align: center;">View all Customers Registered Customers </h3>
+    <a href="/Customers/customer_add/"><button>Add New Customer</button></a>
     {% if datas %}
 
     {% if messages %}
@@ -68,8 +71,8 @@
                         <td>{{data.Customer_name}}</td>
                         <td>{{data.Customer_since}}</td>
                         <td>{{data.Customer_location}}</td> 
-                        <td><a href="/Customers/customer_update/{{data.id}}/">Update</a></td>
-                        <td><a href="/Customers/customer_delete/{{data.id}}/"  onclick="return confirmDelete()">Delete</a></td>
+                        <td><button><a href="/Customers/customer_update/{{data.id}}/">Update</a></button></td>
+                        <td><button><a href="/Customers/customer_delete/{{data.id}}/"  onclick="return confirmDelete()">Delete</a></button></td>
                     </tr>
                 {% endfor %}
             </tbody>
