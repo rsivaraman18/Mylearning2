@@ -61,15 +61,34 @@ def CustomerNewOrder(request):
     order_form = MyOrderForm()
     context = {'cust_order_form':order_form}
     if request.method=='POST':
-        print('POST-->',request.POST)
-        selected_product = request.POST['product_reference']
-        print('selected',selected_product)
-        neworder = MyOrderForm(request.POST)
-        if neworder.is_valid:
+        productid        = request.POST['product_reference']
+        customerid       = request.POST['customer_reference']
+        selected_product = MyProducts.objects.get(id=productid)
+        customer_name    = MyCustomer.objects.get(id=customerid)
+        amount           = float(selected_product.product_price) * float(request.POST['quantity'])
+        gst_amount       = (amount * selected_product.product_gst)/100
+        bill_amount      = amount + gst_amount
+        
+        neworder = Myorders(customer_reference = customer_name,
+                            product_reference  = selected_product,
+                            order_number       = request.POST['order_number'],
+                            order_date         = request.POST['order_date'],
+                            quantity           = request.POST['quantity'],
+                            amount             = amount,
+                            gst_number         = gst_amount,
+                            bill_amount        = bill_amount,
+                            )
+        if neworder.is_valid():
             neworder.save()
             messages.success(request,"New Order Placed Successfully")
         else:
-            messages.warning(request, f"Error in placing order: {neworder.errors}")
+            messages.warning(request,"Erroroooo")
+        # try:
+        #     if neworder.is_valid():
+        #         neworder.save()
+        #         messages.success(request,"New Order Placed Successfully")
+        # except:
+        #     messages.warning(request, "Error in Ordering")
         return redirect('orderslist')
     return render(request,'Customer/4_orderpage.html',context)
 
