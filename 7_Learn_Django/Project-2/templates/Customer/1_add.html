@@ -6,7 +6,8 @@
     <title>Customer Register</title>
 </head>
 <body>
-    New Customer Register Page
+    {% include 'Customer/navbar.html' %}
+    <h2>New Product Register Page</h2>
     <form action="" method="POST" autocomplete="off">
         {% csrf_token %}
         {{cust_form.as_p}}
