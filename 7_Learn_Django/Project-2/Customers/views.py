@@ -28,12 +28,10 @@ def CustomerAdd(request):
     return render(request,'Customer/1_add.html',{'cust_form':cust_form})
 
 
-
 def CustomerViewall(request):
     allcustomers = MyCustomer.objects.all()
     datas = {'datas':allcustomers}
     return render(request,'Customer/2_viewall.html',datas)
-
 
 
 def CustomerDelete(request,id):
@@ -41,6 +39,7 @@ def CustomerDelete(request,id):
     customerdetail.delete()
     messages.success(request,f'Customer {customerdetail.Customer_name} ID{id} Deleted')
     return redirect('/Customers/customer_viewall/')
+
 
 def CustomerUpdate(request,id):
     cust_oldinfo = MyCustomer.objects.get(id=id)
@@ -57,3 +56,33 @@ def CustomerUpdate(request,id):
     return render(request,'Customer/3_update.html',{'cust_form':cust_form})
 
     
+
+def CustomerNewOrder(request):
+    order_form = MyOrderForm()
+    context = {'cust_order_form':order_form}
+    if request.method=='POST':
+        print('POST-->',request.POST)
+        selected_product = request.POST['product_reference']
+        print('selected',selected_product)
+        neworder = MyOrderForm(request.POST)
+        if neworder.is_valid:
+            neworder.save()
+            messages.success(request,"New Order Placed Successfully")
+        else:
+            messages.warning(request, f"Error in placing order: {neworder.errors}")
+        return redirect('orderslist')
+    return render(request,'Customer/4_orderpage.html',context)
+
+
+def CustomerViewOrder(request):
+    allorders = Myorders.objects.all()
+    datas = {'datas':allorders}
+    return render(request,'Customer/5_orderview.html',datas)
+
+
+def CustomerOrderDelete(request,id):
+    order = Myorders.objects.get(id=id)
+    order.delete()
+    messages.success(request,f'Order Id{id} deleted Successfully')
+    return redirect('orderslist')
+
