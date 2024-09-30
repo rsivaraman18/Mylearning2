@@ -115,8 +115,8 @@ def CustomerOrderUpdate(request,id):
         selected_product = MyProducts.objects.get(id=productid)
         customer_name    = MyCustomer.objects.get(id=customerid)
         ## Date Formating
-        order_date_str   = request.POST['order_date']
-        forder_date      = datetime.strptime(order_date_str, '%d-%b-%Y').date()
+        order_date   = request.POST['order_date']
+        
         ## Calculation
         amount           = float(selected_product.product_price) * float(request.POST['quantity'])
         gst_amount       = (amount * selected_product.product_gst)/100
@@ -125,7 +125,7 @@ def CustomerOrderUpdate(request,id):
         neworder = Myorders(customer_reference = customer_name,
                             product_reference  = selected_product,
                             order_number       = request.POST['order_number'],
-                            order_date         = forder_date,
+                            order_date         = order_date,
                             quantity           = request.POST['quantity'],
                             amount             = amount,
                             gst_number         = gst_amount,
