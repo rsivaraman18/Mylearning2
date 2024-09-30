@@ -14,5 +14,6 @@ urlpatterns = [
     path('customer_vieworders/',  views.CustomerViewOrder , name='orderslist'),
     path('customer_neworder/',   views.CustomerNewOrder),
     path('customer_orderdelete/<int:id>/',   views.CustomerOrderDelete),
+    path('customer_orderupdate/<int:id>/',   views.CustomerOrderUpdate),
 
 ]
