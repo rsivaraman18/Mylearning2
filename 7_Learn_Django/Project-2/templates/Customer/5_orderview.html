@@ -65,6 +65,7 @@
                     <th>Amount</th>
                     <th>Gst Number</th>
                     <th>Bill Amount</th>
+                    <th>Update</th>
                     <th>Delete</th>
                 </tr>
             </thead>
@@ -80,6 +81,7 @@
                         <td>{{data.amount}}</td> 
                         <td>{{data.gst_number}}</td> 
                         <td>{{data.bill_amount}}</td> 
+                        <td><button><a href="/Customers/customer_orderupdate/{{data.id}}/"  >update</a></button></td>
                         <td><button><a href="/Customers/customer_orderdelete/{{data.id}}/"  onclick="return confirmDelete()">Delete</a></button></td>
                     </tr>
                 {% endfor %}
